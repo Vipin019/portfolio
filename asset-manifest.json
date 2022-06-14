@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/Vipin019/portfolio/static/css/main.618058c9.css",
+    "main.js": "/Vipin019/portfolio/static/js/main.70ed14e2.js",
+    "static/media/project1.png": "/Vipin019/portfolio/static/media/project1.7c13e06f9d46ef1c4c90.png",
+    "static/media/dp.png": "/Vipin019/portfolio/static/media/dp.a9f8fd2ac8c8ecd44281.png",
+    "static/media/bgHeader.png": "/Vipin019/portfolio/static/media/bgHeader.886f6ffcb8b986246abe.png",
+    "static/media/cv.pdf": "/Vipin019/portfolio/static/media/cv.95c47fa80d5d5425665a.pdf",
+    "index.html": "/Vipin019/portfolio/index.html",
+    "main.618058c9.css.map": "/Vipin019/portfolio/static/css/main.618058c9.css.map",
+    "main.70ed14e2.js.map": "/Vipin019/portfolio/static/js/main.70ed14e2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.618058c9.css",
+    "static/js/main.70ed14e2.js"
+  ]
+}
