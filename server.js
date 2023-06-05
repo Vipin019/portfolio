@@ -27,7 +27,7 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname)));
 
 //universal route
-app.get("/", function (req, res) {
+app.use("*", function (req, res) {
   res.sendFile(__dirname, path.join("./index.html"));
 });
 
