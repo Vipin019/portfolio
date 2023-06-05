@@ -19,12 +19,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-// app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
 //universal route
 app.use("*", function (req, res) {
-  // res.sendFile(__dirname, path.join("./client/build/index.html"));
-  res.send("<h1>Hi I an vipin</h1>");
+  res.sendFile(__dirname, path.join("./client/build/index.html"));
 });
 //PORT
 const PORT = process.env.PORT;
