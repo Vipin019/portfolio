@@ -24,11 +24,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join(__dirname)));
 
 //universal route
-app.use("*", function (req, res) {
-  res.sendFile(__dirname, path.join("./client/build/index.html"));
+app.get("/", function (req, res) {
+  res.sendFile(__dirname, path.join("./index.html"));
 });
 
 //routes
