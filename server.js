@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "./client/build")));
 
 //universal route
-app.use("*", function (req, res) {
+app.get("*", function (req, res) {
   res.sendFile(__dirname, path.join("./client/build/index.html"));
 });
 //PORT
