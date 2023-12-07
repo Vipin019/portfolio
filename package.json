@@ -1,0 +1,23 @@
+{
+  "name": "portfolio2.0",
+  "version": "2.0.0",
+  "description": "My portfolio.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vipin019/portfolio.git"
+  },
+  "author": "Vipin Kumar Patel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vipin019/portfolio/issues"
+  },
+  "homepage": "https://github.com/Vipin019/portfolio#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
