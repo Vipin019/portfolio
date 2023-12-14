@@ -166,6 +166,52 @@ const failureGoogleController = async (req, res) => {
   );
 };
 
+//Register and login with github
+const successGithubController = async (req, res) => {
+  try {
+    const { user } = req;
+    if (!user) {
+      return sendRes(
+        res,
+        500,
+        false,
+        "Can not create account please try again."
+      );
+    }
+    /*Dont store date of the user in the auth model who is registred direstly by google onlyy store the data*/
+    //After creating the other sxhema will store the data.
+    //login after register
+    //check if already in database then dont save again
+    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.EXPIRE_IN,
+    });
+    if (!token) {
+      return sendRes(
+        res,
+        500,
+        false,
+        "Registred successfully but unable to login automatically please login."
+      );
+    }
+    return sendRes(res, 200, true, "Account created and login successfully.", {
+      user,
+      token,
+    });
+  } catch (error) {
+    console.log("Error in successGithubController function.".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error.");
+  }
+};
+const failureGithubController = async (req, res) => {
+  return sendRes(
+    res,
+    500,
+    false,
+    "Can not register and login please try again."
+  );
+};
+
 //accont verification
 //login with github
 //change password
@@ -176,4 +222,6 @@ module.exports = {
   loginController,
   successGoogleController,
   failureGoogleController,
+  successGithubController,
+  failureGithubController,
 };

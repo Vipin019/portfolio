@@ -5,12 +5,16 @@ const {
   loginController,
   successGoogleController,
   failureGoogleController,
+  successGithubController,
+  failureGithubController,
 } = require("../controllers/authController.js");
 const passportUtils = require("../utils/passportUtils.js");
+const passportGithubUtils = require("../utils/passportGithubUtils.js");
 
 const router = express.Router();
 
 passportUtils();
+passportGithubUtils();
 
 router.use(passport.initialize());
 router.use(passport.session());
@@ -39,5 +43,23 @@ router.get(
 router.get("/google/success", successGoogleController);
 // failure
 router.get("/google/failure", failureGoogleController);
+
+// register and login with github
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    successRedirect: "/api/v2/auth/github/success",
+    failureRedirect: "/api/v2/auth/github/failure",
+  })
+);
+// Success
+router.get("/github/success", successGithubController);
+// failure
+router.get("/github/failure", failureGithubController);
 
 module.exports = router;

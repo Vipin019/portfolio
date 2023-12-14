@@ -14,8 +14,8 @@ module.exports = passportUtils = async () => {
       new GoogleStrategy(
         {
           clientID:
-            "951284128729-iuvfti2ih8uktgt3oo5a399tuvsn0ocq.apps.googleusercontent.com", // Your Credentials here.
-          clientSecret: "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", // Your Credentials here.
+            "951284128729-iuvfti2ih8uktgt3oo5a399tuvsn0ocq.apps.googleusercontent.com",
+          clientSecret: "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",
           callbackURL: "http://localhost:8080/api/v2/auth/google/callback",
           passReqToCallback: true,
         },
