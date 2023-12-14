@@ -120,16 +120,22 @@ const loginController = async (req, res) => {
   }
 };
 
-//Register with google
-const successGoogleRegister = async (req, res) => {
+//Register and login with google
+const successGoogleController = async (req, res) => {
   try {
     const { user } = req;
     if (!user) {
-      sendRes(res, 500, false, "Can not create account please try again.");
+      return sendRes(
+        res,
+        500,
+        false,
+        "Can not create account please try again."
+      );
     }
     /*Dont store date of the user in the auth model who is registred direstly by google onlyy store the data*/
     //After creating the other sxhema will store the data.
     //login after register
+    //check if already in database then dont save again
     const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.EXPIRE_IN,
     });
@@ -146,13 +152,18 @@ const successGoogleRegister = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.log("Error in successGoogleRegister function.".red);
+    console.log("Error in successGoogleController function.".red);
     console.log(error);
     return sendRes(res, 500, false, "Server internal error.");
   }
 };
-const failureGoogleRegister = async (req, res) => {
-  return sendRes(res, 500, false, "Can not register please try again.");
+const failureGoogleController = async (req, res) => {
+  return sendRes(
+    res,
+    500,
+    false,
+    "Can not register and login please try again."
+  );
 };
 
 //accont verification
@@ -163,6 +174,6 @@ const failureGoogleRegister = async (req, res) => {
 module.exports = {
   registerController,
   loginController,
-  successGoogleRegister,
-  failureGoogleRegister,
+  successGoogleController,
+  failureGoogleController,
 };

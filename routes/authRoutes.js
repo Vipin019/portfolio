@@ -3,12 +3,13 @@ const passport = require("passport");
 const {
   registerController,
   loginController,
-  successGoogleRegister,
-  failureGoogleRegister,
+  successGoogleController,
+  failureGoogleController,
 } = require("../controllers/authController.js");
 const passportUtils = require("../utils/passportUtils.js");
 
 const router = express.Router();
+
 passportUtils();
 
 router.use(passport.initialize());
@@ -21,20 +22,22 @@ router.post("/login", loginController);
 
 //register by google
 router.get(
-  "/register/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  "/google",
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+  })
 );
 //register by google--callback
 router.get(
-  "/register/google/callback",
+  "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/api/v2/auth/register/google/success",
-    failureRedirect: "/api/v2/auth/register/google/failure",
+    successRedirect: "/api/v2/auth/google/success",
+    failureRedirect: "/api/v2/auth/google/failure",
   })
 );
 // Success
-router.get("/register/google/success", successGoogleRegister);
+router.get("/google/success", successGoogleController);
 // failure
-router.get("/register/google/failure", failureGoogleRegister);
+router.get("/google/failure", failureGoogleController);
 
 module.exports = router;
