@@ -7,14 +7,18 @@ const {
   failureGoogleController,
   successGithubController,
   failureGithubController,
+  successLinkedinController,
+  failureLinkedinController,
 } = require("../controllers/authController.js");
 const passportUtils = require("../utils/passportUtils.js");
 const passportGithubUtils = require("../utils/passportGithubUtils.js");
+const passportLinkdinUtils = require("../utils/passportLinkdinUtils.js");
 
 const router = express.Router();
 
 passportUtils();
 passportGithubUtils();
+passportLinkdinUtils();
 
 router.use(passport.initialize());
 router.use(passport.session());
@@ -61,5 +65,23 @@ router.get(
 router.get("/github/success", successGithubController);
 // failure
 router.get("/github/failure", failureGithubController);
+
+// register and login with linkdin
+router.get(
+  "/linkedin",
+  passport.authenticate("linkedin", { state: "SOME STATE" })
+);
+
+router.get(
+  "/linkedin/callback",
+  passport.authenticate("linkedin", {
+    successRedirect: "/api/v2/auth/linkedin/success",
+    failureRedirect: "/api/v2/auth/linkedin/failure",
+  })
+);
+// Success
+router.get("/linkedin/success", successLinkedinController);
+// failure
+router.get("/linkedin/failure", failureLinkedinController);
 
 module.exports = router;
