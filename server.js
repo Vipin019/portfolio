@@ -4,9 +4,11 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const cors = require("cors");
 const session = require("express-session"); //use for gogin and register by google
+const formidableMiddleware = require("express-formidable");
 
 const connectDB = require("./config/db.js");
 const authRoute = require("./routes/authRoutes.js");
+const userRoute = require("./routes/userRoutes.js");
 
 const app = express();
 //middlewares
@@ -28,6 +30,7 @@ connectDB();
 
 //res apis
 app.use("/api/v2/auth", authRoute);
+app.use("/api/v2/user", formidableMiddleware(), userRoute);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

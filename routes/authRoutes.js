@@ -10,13 +10,13 @@ const {
   successLinkedinController,
   failureLinkedinController,
 } = require("../controllers/authController.js");
-const passportUtils = require("../utils/passportUtils.js");
+const passportGoogleUtils = require("../utils/passportGoogleUtils.js");
 const passportGithubUtils = require("../utils/passportGithubUtils.js");
 const passportLinkdinUtils = require("../utils/passportLinkdinUtils.js");
 
 const router = express.Router();
 
-passportUtils();
+passportGoogleUtils();
 passportGithubUtils();
 passportLinkdinUtils();
 
