@@ -12,7 +12,7 @@ const userRoute = require("./routes/userRoutes.js");
 
 const app = express();
 //middlewares
-dotenv.config();
+dotenv.config({ path: "./.env" });
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));

@@ -11,4 +11,15 @@ const hashPassword = async (password) => {
   }
 };
 
-module.exports = hashPassword;
+const generateToken = async (password) => {
+  try {
+    const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRound);
+    return hashedPassword;
+  } catch (error) {
+    console.log("Error in generateToken function.".red);
+    console.log(error);
+  }
+};
+
+module.exports = { hashPassword, generateToken };

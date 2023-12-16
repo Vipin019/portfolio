@@ -1,8 +1,14 @@
 const JWT = require("jsonwebtoken");
-const authModel = require("../models/aurhModel.js");
 const sendRes = require("../utils/sendRes.js");
-const hashPassword = require("../utils/hashPassword.js");
-const comparePassword = require("../utils/comparePassword.js");
+const { hashPassword, generateToken } = require("../utils/hashPassword.js");
+const authModel = require("../models/aurhModel.js");
+const userModel = require("../models/userModel.js");
+
+const {
+  comparePassword,
+  compareToken,
+} = require("../utils/comparePassword.js");
+const sendEmail = require("../utils/sendemail.js");
 
 //register-- using userId and password
 const registerController = async (req, res) => {
@@ -260,8 +266,59 @@ const failureLinkedinController = async (req, res) => {
   );
 };
 
-//accont verification
-//login with github
+//email verification
+const sendEmailForEmailVerification = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const user = await userModel.findById(id);
+    if (!user) {
+      return sendRes(res, 500, false, "Something went wrong please try again.");
+    }
+    const generatedteToken = await generateToken(id);
+    if (!generatedteToken) {
+      return sendRes(res, 401, false, "Something went wrong please try again.");
+    }
+    const url = `http://localhost:8080/api/v2/auth/email/verify?id=${id}&token=${generatedteToken}`;
+    await sendEmail({
+      email: user.email,
+      subject: `Verify Email`,
+      message: "Follow the link below to verify your email.",
+      html: `<p>Hi Aman,</p><p>I am vipin. You have requested for email verification on my portfolio please follow the link below to verify email.</p> <a href=${url} >${url}</a> <p>If you have not requested it please ignore it.</p><p>Thank you</p>`,
+    });
+    return sendRes(res, 200, true, "Email send successfully.");
+  } catch (error) {
+    console.log("Error in sendEmailForEmailVerification function.".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error.");
+  }
+};
+const emailVerificationController = async (req, res) => {
+  try {
+    const { id, token } = req.query;
+    if (!compareToken(id, token)) {
+      return sendRes(
+        res,
+        401,
+        false,
+        "Email can not verify, verification link expired, please request another email."
+      );
+    }
+    const updated = await userModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          emailVerified: "Yes",
+        },
+      }
+    );
+    return sendRes(res, 200, true, "Email verified successfully.", { updated });
+  } catch (error) {
+    console.log("Error in emailVerificationController function.".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error.");
+  }
+};
+
 //change password
 //forget password
 
@@ -274,4 +331,6 @@ module.exports = {
   failureGithubController,
   successLinkedinController,
   failureLinkedinController,
+  sendEmailForEmailVerification,
+  emailVerificationController,
 };
