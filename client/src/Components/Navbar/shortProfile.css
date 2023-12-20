@@ -1,0 +1,80 @@
+.shortProfile {
+  position: absolute;
+  top: 0.5rem;
+  right: 3.7rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-light);
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+}
+.shortProfile_container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-bg);
+  overflow: hidden;
+  right: -0rem;
+  animation: nav-translate 1s 1s;
+}
+.shortProfile_container--myAccount {
+  height: 7rem;
+  transform: rotate(15deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.shortProfile_container--myOrders {
+  height: 7rem;
+  transform: rotate(15deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.shortProfile_container--myOrderStatus {
+  height: 7rem;
+  transform: rotate(15deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.colorD {
+  background-color: var(--color-bg);
+}
+.colorL {
+  background-color: var(--color-bg-variant);
+}
+.shortProfile_container--myAccount-icon {
+  transform: rotate(-15deg);
+  font-size: 1.5rem;
+}
+.shortProfile_container--myOrders-icon {
+  transform: rotate(-15deg);
+  font-size: 1.5rem;
+}
+.shortProfile_container--myOrderStatus-icon {
+  transform: rotate(-15deg);
+  font-size: 1.5rem;
+}
+input {
+  color: var(--color-light);
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  transform: rotate(-15deg);
+  font-size: 1rem;
+}
+@keyframes nav-translate {
+  0% {
+    right: -21rem;
+  }
+  100% {
+    right: 0rem;
+  }
+}

@@ -9,7 +9,7 @@ const {
   failureGithubController,
   successLinkedinController,
   failureLinkedinController,
-  sendEmailForEmailVerification,
+  sendEmailForEmailVerificationController,
   emailVerificationController,
 } = require("../controllers/authController.js");
 const passportGoogleUtils = require("../utils/passportGoogleUtils.js");
@@ -88,7 +88,7 @@ router.get("/linkedin/failure", failureLinkedinController);
 
 /**********************************Email Verification**************************************/
 //send mail
-router.post("/email/verify/", sendEmailForEmailVerification);
+router.post("/email/verify/", sendEmailForEmailVerificationController);
 //verify mail
 router.get("/email/verify/", emailVerificationController);
 

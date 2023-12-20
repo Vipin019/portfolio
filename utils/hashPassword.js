@@ -8,6 +8,7 @@ const hashPassword = async (password) => {
   } catch (error) {
     console.log("Error in hashPassword function.".red);
     console.log(error);
+    return null;
   }
 };
 

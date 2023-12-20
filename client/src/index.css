@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhai+2&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+/* font-family: 'Roboto', sans-serif; font-family: 'Poppins', sans-serif; --heading*/
+/* font-family: 'Baloo Bhai 2', sans-serif; --paragraph*/
+
+* {
+  margin: 0rem;
+  padding: 0rem;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+:root {
+  --color-bg: rgb(12, 12, 160);
+  --color-bg-variant: rgba(46, 59, 241, 0.501);
+  --color-primary: rgb(46, 185, 240);
+  --color-primary-variant: rgb(30, 0, 55);
+  --color-white: white;
+  --color-light: rgb(197, 197, 197);
+
+  --transition: all 500ms ease;
+
+  --container-width-lg: 75%;
+  --container-width-md: 86%;
+  --container-width-sm: 90%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+body {
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto", sans-serif;
+}
+a {
+  color: var(--color-primary);
+  transition: var(--transition);
+}
+a:hover {
+  color: var(--color-white);
+}

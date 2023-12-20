@@ -1,0 +1,32 @@
+.navbar {
+  width: 2rem;
+  height: 2rem;
+  background-color: aqua;
+  border-radius: 100%;
+  border: 1.5px solid var(--color-light);
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* .navbar:hover {
+  cursor: pointer;
+  width: 2.1rem;
+  height: 2.1rem;
+  transition: var(--transition);
+} */
+.navbar > img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  opacity: 90%;
+}
+.navbar > img:hover {
+  cursor: pointer;
+  transition: var(--transition);
+  opacity: 100%;
+}

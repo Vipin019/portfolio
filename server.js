@@ -28,6 +28,11 @@ app.use(
 //mongodb connection config
 connectDB();
 
+app.use(express.static(__dirname + "/client/build")); //need to tell wheater it is a build version or a development version
+app.use("/", function (req, res) {
+  res.sendFile(__dirname + "/client/build/index.html");
+});
+
 //res apis
 app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/user", formidableMiddleware(), userRoute);
