@@ -1,10 +1,19 @@
 import "./shortProfile.css";
 import { CgProfile, CgWebsite } from "react-icons/cg";
 import { TbStatusChange } from "react-icons/tb";
+import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom"; //https://stackoverflow.com/questions/34735580/how-to-do-a-redirect-to-another-route-with-react-router
 
-const ShortProfile = ({ shortProfileContainerDisp, shortProfileDisp }) => {
+const ShortProfile = () => {
   // const navigate = useNavigate();
+
+  const shortProfileDisp = useSelector((state) => {
+    return state.setShortProfileDisp;
+  });
+  const shortProfileContainerDisp = useSelector((state) => {
+    return state.setShortProfileContainerDisp;
+  });
+
   return (
     <div className={shortProfileDisp}>
       <div
