@@ -9,8 +9,15 @@
   color: var(--color-light);
   font-family: "Roboto", sans-serif;
   overflow: hidden;
+  border-radius: 0.5rem;
 }
+.shortProfile-h {
+  display: none;
+}
+
 .shortProfile_container {
+  animation: nav-translate cubic-bezier(0, 0, 0, 1) 1s;
+  /* right: 0rem; */
   position: relative;
   height: 100%;
   display: flex;
@@ -18,8 +25,17 @@
   align-items: center;
   background-color: var(--color-bg);
   overflow: hidden;
-  right: -0rem;
-  animation: nav-translate 1s 1s;
+}
+.shortProfile_container-h {
+  right: -21rem;
+  animation: nav-translate-h cubic-bezier(0, 0, 0, 1) 1s;
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-bg);
+  overflow: hidden;
 }
 .shortProfile_container--myAccount {
   height: 7rem;
@@ -76,5 +92,13 @@ input {
   }
   100% {
     right: 0rem;
+  }
+}
+@keyframes nav-translate-h {
+  0% {
+    right: 0rem;
+  }
+  100% {
+    right: -21rem;
   }
 }
