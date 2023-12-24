@@ -127,6 +127,9 @@ const loginController = async (req, res) => {
   }
 };
 
+//login with email and password
+/*Pending */
+
 //Register and login with google
 const successGoogleController = async (req, res) => {
   try {

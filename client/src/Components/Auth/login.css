@@ -1,0 +1,69 @@
+.login {
+  width: fit-content;
+  /* width: 11rem; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.login p {
+  font-size: 0.7rem;
+}
+.login_loginInfo {
+  font-size: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.login_loginInfo > input {
+  background-color: var(--color-light-bg);
+}
+.login_loginInfo_password {
+  position: relative;
+  right: -0.5rem;
+}
+.login_loginInfo-password {
+  background-color: var(--color-light-bg);
+}
+.login_loginInfo_password-icon {
+  position: relative;
+  right: 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.login-forget {
+  padding: 0.1rem;
+  border-radius: 0.2rem;
+  margin: 0.1rem 0rem 0.7rem 0rem;
+  position: relative;
+  right: -3rem;
+}
+.login_signUp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.3rem 0rem 0.3rem 0rem;
+}
+.login_signUp > p {
+  margin-right: 0.2rem;
+}
+.login_signUp-signUpButton {
+  font-size: 0.7rem;
+  padding: 0.1rem;
+  border-radius: 0.2rem;
+}
+.login_withOther {
+  margin: 0.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login_withOther > img {
+  height: 2rem;
+  width: 2rem;
+  margin: 0rem 0.2rem 0rem 0.2rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}

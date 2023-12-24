@@ -1,0 +1,58 @@
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  width: fit-content;
+  overflow: hidden;
+  z-index: 0;
+}
+.auth-h {
+  display: none;
+}
+.auth_container {
+  position: relative;
+  background-color: var(--color-light-bg);
+  padding: 0.5rem;
+  border: 0.2rem;
+  opacity: 80%;
+  animation: cubic-bezier(1, 1, 0, 0) 1s auth-translate 0s 1;
+  transition: var(--transition);
+}
+.auth_container-h {
+  position: relative;
+  background-color: var(--color-light-bg);
+  padding: 0.5rem;
+  border: 0.2rem;
+  opacity: 80%;
+  animation: cubic-bezier(1, 1, 0, 0) 0.5s auth-translate-h 0s 1;
+  transition: var(--transition);
+  top: -14rem;
+  right: -13rem;
+}
+@keyframes auth-translate {
+  0% {
+    top: -14rem;
+    right: -13rem;
+    border-radius: 100%;
+  }
+  100% {
+    top: 0rem;
+    right: 0rem;
+    border-radius: 0%;
+  }
+}
+@keyframes auth-translate-h {
+  0% {
+    top: 0rem;
+    right: 0rem;
+    border-radius: 0%;
+  }
+  100% {
+    top: -14rem;
+    right: -13rem;
+    border-radius: 100%;
+  }
+}

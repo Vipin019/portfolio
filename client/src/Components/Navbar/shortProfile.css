@@ -17,7 +17,6 @@
 
 .shortProfile_container {
   animation: nav-translate cubic-bezier(0, 0, 0, 1) 1s;
-  /* right: 0rem; */
   position: relative;
   height: 100%;
   display: flex;
@@ -79,7 +78,7 @@
   transform: rotate(-15deg);
   font-size: 1.5rem;
 }
-input {
+.shortProfile_container input {
   color: var(--color-light);
   margin-left: 0.5rem;
   margin-right: 0.5rem;

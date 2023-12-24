@@ -20,6 +20,8 @@
   --color-primary-variant: rgb(30, 0, 55);
   --color-white: white;
   --color-light: rgb(197, 197, 197);
+  --color-light-d: rgb(113, 113, 113);
+  --color-light-bg: rgb(238, 238, 238);
 
   --transition: all 500ms ease;
 
@@ -54,4 +56,28 @@ a {
 }
 a:hover {
   color: var(--color-white);
+}
+.btn {
+  width: max-content;
+  display: inline-block;
+  color: var(--color-primary-variant);
+  padding: 0.5rem 1rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  border: 1px solid var(--color-primary-variant);
+  transition: var(--transition);
+  background-color: var(--color-light);
+}
+.btn:hover {
+  background: var(--color-light-d);
+  color: var(--color-white);
+  border-color: transparent;
+}
+.inpt {
+  padding: 0.5rem 0rem 0.1rem 0rem;
+  font-size: 1rem;
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-primary-variant);
+  margin: 0.1rem;
+  color: var(--color-primary-variant);
 }
