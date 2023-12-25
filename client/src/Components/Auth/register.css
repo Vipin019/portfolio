@@ -1,70 +1,74 @@
-.login {
+.register {
   width: fit-content;
-  /* width: 11rem; */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.login p {
+.register small {
+  font-size: 0.55rem;
+  margin: 0rem;
+  padding: 0rem;
+  position: relative;
+  top: -0.5rem;
+}
+.register p {
   font-size: 0.7rem;
 }
-.login_loginInfo {
+.register_registerInfo {
   font-size: auto;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   flex-direction: column;
 }
-.login_loginInfo > input {
+.register_registerInfo input {
   /* background-color: var(--color-light-bg); */
   background-color: transparent;
   backdrop-filter: blur(15px);
+  width: 15rem;
 }
-.login_loginInfo_password {
+.register_registerInfo_id-icon {
   position: relative;
-  right: -0.5rem;
+  right: 0rem;
+  top: 0.2rem;
+  cursor: pointer;
+  font-size: 1rem;
 }
-.login_loginInfo-password {
+.register_registerInfo-password {
   /* background-color: var(--color-light-bg); */
   background-color: transparent;
   backdrop-filter: blur(15px);
 }
-.login_loginInfo_password-icon {
+.register_registerInfo_password-icon {
   position: relative;
   right: 1.2rem;
   cursor: pointer;
   font-size: 1rem;
+  top: 0.2rem;
 }
 
-.login-forget {
-  padding: 0.1rem;
-  border-radius: 0.2rem;
-  margin: 0.1rem 0rem 0.7rem 0rem;
-  position: relative;
-  right: -3rem;
-}
-.login_signUp {
+.register_signUp {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0.3rem 0rem 0.3rem 0rem;
 }
-.login_signUp > p {
+.register_signUp > p {
   margin-right: 0.2rem;
 }
-.login_signUp-signUpButton {
+.register_signUp-signUpButton {
   font-size: 0.7rem;
   padding: 0.1rem;
   border-radius: 0.2rem;
 }
-.login_withOther {
+.register_withOther {
   margin: 0.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.login_withOther > img {
+.register_withOther > img {
   height: 2rem;
   width: 2rem;
   margin: 0rem 0.2rem 0rem 0.2rem;
@@ -72,6 +76,6 @@
   cursor: pointer;
   opacity: 80%;
 }
-.login_withOther > img:hover {
+.register_withOther > img:hover {
   opacity: 100%;
 }

@@ -2,6 +2,7 @@ import Navbar from "./Components/Navbar/Navbar";
 import ShortProfile from "./Components/Navbar/ShortProfile";
 import { Routes, Route } from "react-router-dom";
 import Auth from "./Pages/Auth";
+import Home from "./Pages/Home";
 
 const App = () => {
   return (
@@ -9,7 +10,9 @@ const App = () => {
       <Navbar />
       <ShortProfile />
       <Auth />
-      <Routes>{/* <Route path="/auth" element={} /> */}</Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </>
   );
 };

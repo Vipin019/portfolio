@@ -4,18 +4,20 @@ import Login from "../Components/Auth/Login";
 import { useSelector } from "react-redux";
 
 const Auth = () => {
-  const what = "login";
   const authContainerDisp = useSelector((state) => {
     return state.setAuthContainerDisp;
   });
   const authDisp = useSelector((state) => {
     return state.setAuthDisp;
   });
+  const authState = useSelector((state) => {
+    return state.setAuthState;
+  });
 
   return (
     <div className={authDisp}>
       <div className={authContainerDisp}>
-        {what === "login" ? <Login /> : <Register />}
+        {authState === "login" ? <Login /> : <Register />}
       </div>
     </div>
   );

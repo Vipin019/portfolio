@@ -15,3 +15,6 @@ export const setAuthContainerDisp = () => {
 export const setAuthDisp = (val) => {
   return { type: "setAuthDisp", payload: val };
 };
+export const setAuthState = (val) => {
+  return { type: "setAuthState", payload: val };
+};

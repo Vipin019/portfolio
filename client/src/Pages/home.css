@@ -1,0 +1,12 @@
+.home {
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 30vh;
+}
+.home > h1 {
+  text-align: center;
+  color: var(--color-primary);
+}

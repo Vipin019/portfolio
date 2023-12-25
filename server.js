@@ -29,14 +29,14 @@ app.use(
 connectDB();
 
 app.use(express.static(__dirname + "/client/build")); //need to tell wheater it is a build version or a development version
-app.use("/", function (req, res) {
-  res.sendFile(__dirname + "/client/build/index.html");
-});
 
 //res apis
 app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/user", formidableMiddleware(), userRoute);
 
+app.use("*", function (req, res) {
+  res.sendFile(__dirname + "/client/build/index.html");
+});
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`.green);

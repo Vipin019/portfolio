@@ -7,11 +7,11 @@ import {
   setAuthContainerDisp,
   setAuthDisp,
 } from "../../actions/index";
-import { useNavigate } from "react-router-dom"; //https://stackoverflow.com/questions/34735580/how-to-do-a-redirect-to-another-route-with-react-router
+// import { useNavigate } from "react-router-dom"; //https://stackoverflow.com/questions/34735580/how-to-do-a-redirect-to-another-route-with-react-router
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const loggedin = false;
 
   return (
