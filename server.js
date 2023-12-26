@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const session = require("express-session"); //use for gogin and register by google
 const formidableMiddleware = require("express-formidable");
+const cookieParser = require("cookie-parser");
 
 const connectDB = require("./config/db.js");
 const authRoute = require("./routes/authRoutes.js");
@@ -24,6 +25,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
   })
 );
+app.use(cookieParser());
 
 //mongodb connection config
 connectDB();
@@ -33,6 +35,11 @@ app.use(express.static(__dirname + "/client/build")); //need to tell wheater it 
 //res apis
 app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/user", formidableMiddleware(), userRoute);
+
+// app.use("/cookie", (req, res) => {
+//   res.cookie("demo", "123");
+//   res.send("Hi");
+// });
 
 app.use("*", function (req, res) {
   res.sendFile(__dirname + "/client/build/index.html");

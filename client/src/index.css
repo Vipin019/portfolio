@@ -96,3 +96,14 @@ a:hover {
 .m-xpoint2rem {
   margin-left: 0.2rem;
 }
+.rotate-infinit {
+  animation: rotate 2s linear infinite;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

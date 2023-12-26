@@ -1,6 +1,9 @@
+import getCookie from "../utils/getCookieByName";
+
 const iniAuthContainerDisp = "auth_container-h";
 const iniAuthDisp = "auth-h";
 const iniAuthState = "login";
+const iniLoginState = getCookie("login");
 
 export const setAuthContainerDisp = (state = iniAuthContainerDisp, action) => {
   if (action.type === "setAuthContainerDisp") {
@@ -18,6 +21,12 @@ export const setAuthDisp = (state = iniAuthDisp, action) => {
 
 export const setAuthState = (state = iniAuthState, action) => {
   if (action.type === "setAuthState") {
+    return action.payload;
+  }
+  return state;
+};
+export const setLoginState = (state = iniLoginState, action) => {
+  if (action.type === "setLoginState") {
     return action.payload;
   }
   return state;

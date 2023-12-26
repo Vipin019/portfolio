@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const {
   registerController,
+  emailAlreadyRegistred,
   loginController,
   successGoogleController,
   failureGoogleController,
@@ -11,6 +12,7 @@ const {
   failureLinkedinController,
   sendEmailForEmailVerificationController,
   emailVerificationController,
+  userIdAlreadyRegistred,
 } = require("../controllers/authController.js");
 const passportGoogleUtils = require("../utils/passportGoogleUtils.js");
 const passportGithubUtils = require("../utils/passportGithubUtils.js");
@@ -27,6 +29,10 @@ router.use(passport.session());
 
 // register--by userId and password
 router.post("/register", registerController);
+//email already registred
+router.post("/email-registred", emailAlreadyRegistred);
+//user id already registred
+router.post("/userid-registred", userIdAlreadyRegistred);
 // login--by userId and password
 router.post("/login", loginController);
 

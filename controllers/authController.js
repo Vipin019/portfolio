@@ -1,6 +1,6 @@
 const JWT = require("jsonwebtoken");
 const sendRes = require("../utils/sendRes.js");
-const { hashPassword, generateToken } = require("../utils/hashPassword.js");
+const { hashPassword } = require("../utils/hashPassword.js");
 const authModel = require("../models/aurhModel.js");
 const userModel = require("../models/userModel.js");
 
@@ -16,37 +16,37 @@ const registerController = async (req, res) => {
   try {
     const { userId, password } = req.body;
     if (!userId) {
-      return sendRes(res, 400, false, "userId is required.");
+      return sendRes(res, 200, false, "userId is required.");
     }
     if (!password) {
-      return sendRes(res, 400, false, "Password is required.");
+      return sendRes(res, 200, false, "Password is required.");
     }
     if (userId.length < 2) {
-      return sendRes(res, 400, false, "userId should be 2 character long.");
+      return sendRes(res, 200, false, "userId should be 2 character long.");
     }
     if (password.length < 6) {
-      return sendRes(res, 400, false, "Password ahould be 6 character long.");
+      return sendRes(res, 200, false, "Password ahould be 6 character long.");
     }
     const hashedPassword = await hashPassword(password);
     if (!hashedPassword) {
       return sendRes(
         res,
-        401,
+        202,
         false,
         "Can not creat account please try again."
       );
     }
     const registred = await authModel.findOne({ userId, hashedPassword });
     if (registred) {
-      return sendRes(res, 401, false, "Already registred, please login.");
+      return sendRes(res, 200, false, "Already registred, please login.");
     }
     const existing = await authModel.findOne({ userId });
     if (existing) {
       return sendRes(
         res,
-        401,
+        200,
         false,
-        "This uaerId is already taken by the other user choose another userId."
+        "This userId is already taken by the other user choose another userId."
       );
     }
     const account = await new authModel({
@@ -56,30 +56,81 @@ const registerController = async (req, res) => {
     if (!account) {
       return sendRes(
         res,
-        500,
+        200,
         false,
         "Unable to create account please try again."
       );
     }
 
     //login after register
-    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    const token = JWT.sign({ _id: account._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.EXPIRE_IN,
     });
     if (!token) {
       return sendRes(
         res,
-        500,
+        200,
         false,
         "Registred successfully but unable to login automatically please login."
       );
     }
-    return sendRes(res, 200, true, "Account created and login successfully.", {
+    res.cookie("token", token, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+      secure: true,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
+    res.cookie("login", true, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+    });
+    return sendRes(res, 201, true, "Account created and login successfully.", {
       account,
-      token,
     });
   } catch (error) {
     console.log("Error in registerController".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error.");
+  }
+};
+//is email already registred
+const emailAlreadyRegistred = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return sendRes(res, 401, false, "Email is required.");
+    }
+    const isRegistred = await userModel.findOne({ email });
+    // console.log(isRegistred);
+    if (isRegistred) {
+      return sendRes(res, 200, true, "Email Already registred please sign in.");
+    }
+    return sendRes(res, 200, false, "Email not registred.");
+  } catch (error) {
+    console.log("Error in emailAlreadyRegistred function.".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error.");
+  }
+};
+//is user id already taken
+const userIdAlreadyRegistred = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return sendRes(res, 401, false, "User Id is required.");
+    }
+    const isRegistred = await authModel.findOne({ userId });
+    // console.log(isRegistred);
+    if (isRegistred) {
+      return sendRes(
+        res,
+        200,
+        true,
+        "User id Already already taken please try another one."
+      );
+    }
+    return sendRes(res, 200, false, "User id is avilable.");
+  } catch (error) {
+    console.log("Error in userIdAlreadyRegistred function.".red);
     console.log(error);
     return sendRes(res, 500, false, "Server internal error.");
   }
@@ -380,7 +431,7 @@ const sendEmailForForgetPasswordController = async (req, res) => {
           );
         }
         return sendRes(res, 201, true, "Password updated successfully.");
-      } //-------------------------------------------------------------------------------------------------------------end
+      } //----------------------------------------------------------end
       /****************send reset email if account is created by userId and password*************************/
       const generatedteToken = JWT.sign(
         { _id: user._id },
@@ -420,7 +471,7 @@ const sendEmailForForgetPasswordController = async (req, res) => {
         true,
         "Please check your email we have send an email. Please follow the email to reset your password."
       );
-    } //----------------------------------------------------------------------------------------------------------------end
+    } //------------------------------------------------------------------------------end
     /********************Send reset email when user has not nogin using userId and password*************************/
     const user = await userModel.findOne({ email });
     if (!user) {
@@ -506,6 +557,8 @@ const updateForgetPasswordController = async (req, res) => {
 
 module.exports = {
   registerController,
+  emailAlreadyRegistred,
+  userIdAlreadyRegistred,
   loginController,
   successGoogleController,
   failureGoogleController,
