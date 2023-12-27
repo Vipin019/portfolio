@@ -14,7 +14,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   const loginState = useSelector((state) => {
-    console.log(state.setLoginState);
     return state.setLoginState;
   });
 

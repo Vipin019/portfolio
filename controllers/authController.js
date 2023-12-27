@@ -92,6 +92,100 @@ const registerController = async (req, res) => {
     return sendRes(res, 500, false, "Server internal error.");
   }
 };
+
+// Register by using email and password
+const registerByEmailAndPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email) {
+      return sendRes(res, 200, false, "Email is required.");
+    }
+    if (!password) {
+      return sendRes(res, 200, false, "Password is required.");
+    }
+    let userId = "";
+    for (let val of email) {
+      if (val === ".") {
+        break;
+      } else {
+        userId = userId + val;
+      }
+    }
+    const existing1 = await userModel.findOne({ email });
+    if (existing1) {
+      return sendRes(res, 200, false, "Email already registred Please login.");
+    }
+    const existing2 = await authModel.findOne({ userId });
+    if (existing2) {
+      userId = email;
+    }
+    const hashedPassword = await hashPassword(password);
+    if (!hashedPassword) {
+      return sendRes(
+        res,
+        200,
+        false,
+        "Can not creat account please try again."
+      );
+    }
+    const res1 = await new userModel({
+      email,
+    }).save();
+    if (!res1) {
+      return sendRes(
+        res,
+        200,
+        false,
+        "Can not creat account please try again."
+      );
+    }
+    const res2 = await new authModel({
+      userId,
+      password: hashedPassword,
+    }).save();
+    if (!res2) {
+      let deleted = await userModel.deleteOne({ email });
+      while (!deleted) {
+        deleted = await userModel.deleteOne({ email });
+      }
+      return sendRes(
+        res,
+        200,
+        false,
+        "Can not creat account please try again."
+      );
+    }
+    //login after creating account
+    const token = JWT.sign({ _id: res2._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.EXPIRE_IN,
+    });
+    if (!token) {
+      return sendRes(
+        res,
+        200,
+        false,
+        "Registred successfully but unable to login automatically please login."
+      );
+    }
+    res.cookie("token", token, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+      secure: true,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
+    res.cookie("login", true, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+    });
+    return sendRes(res, 201, true, "Account created and login successfully.", {
+      account: res2,
+    });
+  } catch (error) {
+    console.log("Error in registerByEmailAndPassword".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error.");
+  }
+};
+
 //is email already registred
 const emailAlreadyRegistred = async (req, res) => {
   try {
@@ -141,16 +235,16 @@ const loginController = async (req, res) => {
   try {
     const { userId, password } = req.body;
     if (!userId) {
-      return sendRes(res, 400, false, "userId is required.");
+      return sendRes(res, 200, false, "userId is required.");
     }
     if (!password) {
-      return sendRes(res, 400, false, "Password is required.");
+      return sendRes(res, 200, false, "Password is required.");
     }
     const user = await authModel.findOne({ userId });
     if (!user) {
       return sendRes(
         res,
-        400,
+        200,
         false,
         "Incorrect combination of userId and password."
       );
@@ -159,7 +253,7 @@ const loginController = async (req, res) => {
     if (!match) {
       return sendRes(
         res,
-        400,
+        200,
         false,
         "Incorrect combination of userId and password."
       );
@@ -168,8 +262,18 @@ const loginController = async (req, res) => {
       expiresIn: process.env.EXPIRE_IN,
     });
     if (!token) {
-      return sendRes(res, 500, false, "Unable to login please try again.");
+      return sendRes(res, 200, false, "Unable to login please try again.");
     }
+    res.cookie("token", token, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+      secure: true,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
+    res.cookie("login", true, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+    });
+
     return sendRes(res, 200, true, "Login successfully.", { user, token });
   } catch (error) {
     console.log("Error in loginController.".red);
@@ -179,7 +283,55 @@ const loginController = async (req, res) => {
 };
 
 //login with email and password
-/*Pending */
+const loginByEmailAndPasswordController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email) {
+      return sendRes(res, 200, false, "Email is required.");
+    }
+    if (!password) {
+      return sendRes(res, 200, false, "Password is required.");
+    }
+    const user = await userModel.findOne({ email }).populate();
+    if (!user) {
+      return sendRes(
+        res,
+        200,
+        false,
+        "Incorrect combination of userId and password."
+      );
+    }
+    const match = await comparePassword(password, user.auth.password);
+    if (!match) {
+      return sendRes(
+        res,
+        200,
+        false,
+        "Incorrect combination of userId and password."
+      );
+    }
+    const token = JWT.sign({ _id: user.auth._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.EXPIRE_IN,
+    });
+    if (!token) {
+      return sendRes(res, 200, false, "Unable to login please try again.");
+    }
+    res.cookie("token", token, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+      secure: true,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
+    res.cookie("login", true, {
+      maxAge: process.env.COOKIE_EXPIRE_IN * 24 * 60 * 60 * 1000,
+    });
+    return sendRes(res, 200, true, "Login successfully.", { user, token });
+  } catch (error) {
+    console.log("Error in loginController.".red);
+    console.log(error);
+    sendRes(res, 500, false, "Server internal Error.");
+  }
+};
 
 //Register and login with google
 const successGoogleController = async (req, res) => {
@@ -557,9 +709,11 @@ const updateForgetPasswordController = async (req, res) => {
 
 module.exports = {
   registerController,
+  registerByEmailAndPassword,
   emailAlreadyRegistred,
   userIdAlreadyRegistred,
   loginController,
+  loginByEmailAndPasswordController,
   successGoogleController,
   failureGoogleController,
   successGithubController,

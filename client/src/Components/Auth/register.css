@@ -47,7 +47,12 @@
   font-size: 1rem;
   top: 0.2rem;
 }
-
+.register-signInButton {
+  height: 2rem;
+  width: 12rem;
+  display: block;
+  text-align: center;
+}
 .register_signUp {
   display: flex;
   justify-content: center;
@@ -78,4 +83,10 @@
 }
 .register_withOther > img:hover {
   opacity: 100%;
+}
+.correct {
+  color: var(--color-green);
+}
+.incorrect {
+  color: var(--color-red);
 }

@@ -2,8 +2,8 @@ import "./register.css";
 import googleLogo from "../../Images/googleLogo.png";
 import githubLogo from "../../Images/githubLogo.png";
 import linkedinLogo from "../../Images/linkedinLogo.png";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { MdInfo } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
@@ -20,9 +20,10 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const Register = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [onClickLoading, setOnClickLoading] = useState(null);
   /*******************************************************ID******/
   const [id, setId] = useState(null);
   const [idChecking, setIdChecking] = useState(false);
@@ -38,9 +39,21 @@ const Register = () => {
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
   const [confirmPassword, setConfirmPassword] = useState(null);
 
+  function removeSpace(s) {
+    let ans = "";
+    for (let val of s) {
+      if (val !== " ") {
+        ans += val;
+      }
+    }
+    return ans;
+  }
+
   const handleIdChange = async (e) => {
     try {
-      setId(e.target.value);
+      setIdChecking(true);
+      const val = removeSpace(e.target.value);
+      setId(val);
       //email validation
       // Regular expression for basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,16 +61,15 @@ const Register = () => {
       setIsEmail(isValid);
       //is email already registred
       if (isValid) {
-        setIdChecking(true);
         const response = await axios.post(
           "http://localhost:8080/api/v2/auth/email-registred",
           {
-            email: e.target.value,
+            email: val,
           }
         );
         setIdChecking(false);
         setIsEmailAlreadyReg(response?.data?.success);
-      } else if (e.target.value.length < 2) {
+      } else if (val.length < 2) {
         setIsIdCorrect(false);
       } else {
         setIdChecking(true);
@@ -65,15 +77,17 @@ const Register = () => {
         const response = await axios.post(
           "http://localhost:8080/api/v2/auth/userid-registred",
           {
-            userId: e.target.value,
+            userId: val,
           }
         );
-        setIdChecking(false);
+
         setIsIdAvilavle(!response?.data?.success);
       }
+      setIdChecking(false);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong.");
+      setIdChecking(false);
     }
   };
 
@@ -179,6 +193,7 @@ const Register = () => {
   /***********************************************HANDLESIGNUP */
   const handleSignUp = async () => {
     try {
+      setOnClickLoading(true);
       if (
         isEmail &&
         passwordLevel !== "invalid" &&
@@ -187,7 +202,23 @@ const Register = () => {
         password !== null &&
         confirmPassword !== null
       ) {
-        //backend is not complete
+        const response = await axios.post(
+          "http://localhost:8080/api/v2/auth/register/email-password",
+          {
+            email: id,
+            password,
+          }
+        );
+        if (response?.data?.success) {
+          dispatch(setAuthContainerDisp());
+          setInterval(() => {
+            dispatch(setAuthDisp("auth-h"));
+            dispatch(setLoginState(true));
+          }, 500);
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
       } else if (
         passwordLevel !== "Invalid" &&
         password === confirmPassword &&
@@ -223,9 +254,11 @@ const Register = () => {
       } else {
         toast.error("Sorry something went wrong.");
       }
+      setOnClickLoading(false);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong please try again.");
+      setOnClickLoading(false);
     }
   };
 
@@ -252,7 +285,7 @@ const Register = () => {
                       <RiLoader2Line className="register_registerInfo_id-icon rotate-infinit" />
                     ) : isEmailAlreadyReg ? (
                       <RxCross2
-                        className="register_registerInfo_id-icon"
+                        className="register_registerInfo_id-icon incorrect"
                         onClick={() => {
                           setId(" ");
                           setIsEmail(false);
@@ -260,7 +293,7 @@ const Register = () => {
                         }}
                       />
                     ) : (
-                      <TiTick className="register_registerInfo_id-icon" />
+                      <TiTick className="register_registerInfo_id-icon correct" />
                     )
                   ) : id === null || id === "" ? (
                     <MdInfo
@@ -271,10 +304,10 @@ const Register = () => {
                     <RiLoader2Line className="register_registerInfo_id-icon rotate-infinit" />
                   ) : isIdCorrect === true ? (
                     isIdAvilable ? (
-                      <TiTick className="register_registerInfo_id-icon" />
+                      <TiTick className="register_registerInfo_id-icon correct" />
                     ) : (
                       <RxCross2
-                        className="register_registerInfo_id-icon"
+                        className="register_registerInfo_id-icon incorrect"
                         onClick={() => {
                           setId("");
                           setIsEmail(false);
@@ -284,7 +317,7 @@ const Register = () => {
                     )
                   ) : (
                     <RxCross2
-                      className="register_registerInfo_id-icon"
+                      className="register_registerInfo_id-icon incorrect"
                       onClick={() => {
                         setId("");
                         setIsEmail(false);
@@ -341,7 +374,7 @@ const Register = () => {
                 </>
                 <>
                   {passwordLevel === "Strong" ? (
-                    <TiTick className="register_registerInfo_password-icon m-xpoint2rem" />
+                    <TiTick className="register_registerInfo_password-icon m-xpoint2rem correct" />
                   ) : (
                     <MdInfo
                       className="register_registerInfo_password-icon m-xpoint2rem"
@@ -384,7 +417,7 @@ const Register = () => {
                 />
                 <>
                   {confirmPassword === password && password?.length >= 6 ? (
-                    <TiTick className="register_registerInfo_password-icon" />
+                    <TiTick className="register_registerInfo_password-icon correct" />
                   ) : confirmPasswordType === "password" ? (
                     <IoMdEye
                       className="register_registerInfo_password-icon"
@@ -413,12 +446,18 @@ const Register = () => {
               </small>
             </div>
           </div>
-          <input
-            type="button"
-            value="Sign Up"
-            className="register-signInButton btn"
-            onClick={handleSignUp}
-          />
+          {onClickLoading ? (
+            <div className="register-signInButton btn">
+              <RiLoader2Line className="rotate-infinit" />
+            </div>
+          ) : (
+            <input
+              type="button"
+              value="Sign Up"
+              className="register-signInButton btn"
+              onClick={handleSignUp}
+            />
+          )}
           <div className="register_signUp">
             <p>Already registred</p>
             <input

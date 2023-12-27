@@ -22,6 +22,8 @@
   --color-light: rgb(197, 197, 197);
   --color-light-d: rgb(113, 113, 113);
   --color-light-bg: rgb(238, 238, 238);
+  --color-red: rgb(187, 54, 54);
+  --color-green: rgb(6, 139, 18);
 
   --transition: all 500ms ease;
 

@@ -44,6 +44,12 @@
   position: relative;
   right: -3rem;
 }
+.login-signInButton {
+  height: 2rem;
+  width: 8rem;
+  display: block;
+  text-align: center;
+}
 .login_signUp {
   display: flex;
   justify-content: center;

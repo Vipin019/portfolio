@@ -2,16 +2,116 @@ import "./login.css";
 import googleLogo from "../../Images/googleLogo.png";
 import githubLogo from "../../Images/githubLogo.png";
 import linkedinLogo from "../../Images/linkedinLogo.png";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import { setAuthState } from "../../actions/index";
+import {
+  setAuthContainerDisp,
+  setAuthDisp,
+  setAuthState,
+  setLoginState,
+} from "../../actions/index";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { RiLoader2Line } from "react-icons/ri";
 
 const Login = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const [passwordType, setPasswordType] = useState("password");
+  const [id, setId] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [isEmail, setIsEmail] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+
+  function removeSpace(s) {
+    let ans = "";
+    let i = 0;
+    for (let val of s) {
+      if (val !== " ") {
+        ans += val;
+      }
+    }
+    return ans;
+  }
+
+  const handleIdChange = (e) => {
+    try {
+      setId(removeSpace(e.target.value));
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValid = emailRegex.test(removeSpace(e.target.value));
+      setIsEmail(isValid);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong.");
+    }
+  };
+  const handleOnSignIn = async () => {
+    try {
+      setIsLoading(true);
+      if (
+        isEmail &&
+        id !== null &&
+        password !== null &&
+        id !== "" &&
+        password !== ""
+      ) {
+        const res = await axios.post(
+          "http://localhost:8080/api/v2/auth/login/email-password",
+          {
+            email: id,
+            password,
+          }
+        );
+        if (res?.data?.success) {
+          dispatch(setAuthContainerDisp());
+          setInterval(() => {
+            dispatch(setAuthDisp("auth-h"));
+            dispatch(setLoginState(true));
+          }, 500);
+
+          toast.success(res?.data?.message);
+        } else {
+          toast.error(res?.data?.message || "Sorry some thing went wrong");
+        }
+      } else if (
+        id !== null &&
+        password !== null &&
+        id !== "" &&
+        password !== ""
+      ) {
+        const res = await axios.post(
+          "http://localhost:8080/api/v2/auth/login",
+          {
+            userId: id,
+            password,
+          }
+        );
+        if (res?.data?.success) {
+          dispatch(setAuthContainerDisp());
+          setInterval(() => {
+            dispatch(setAuthDisp("auth-h"));
+            dispatch(setLoginState(true));
+          }, 500);
+          toast.success(res?.data?.message);
+        } else {
+          toast.error(res?.data?.message || "Sorry some thing went wrong");
+        }
+      } else if (id === null || id === "") {
+        toast.error("Please enter user id or email");
+      } else if (password === null || password === "") {
+        toast.error("Please enter password");
+      } else {
+        toast.error("Something went wrong");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -19,20 +119,24 @@ const Login = () => {
         <div className="login_loginInfo">
           <input
             type="text"
-            //   value=""
+            value={id}
             placeholder="Enter your email or userId"
             maxLength="25"
             className="login_loginInfo-id inpt"
             require
+            onChange={handleIdChange}
           />
           <div className="login_loginInfo_password">
             <input
               type={passwordType}
-              // value=""
+              value={password}
               placeholder="Enter your password"
               maxLength="20"
               className="login_loginInfo-password inpt"
               require
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <>
               {passwordType === "password" ? (
@@ -60,11 +164,19 @@ const Login = () => {
           value="Forget Password"
           className="login-forget btn"
         />
-        <input
-          type="button"
-          value="Sign In"
-          className="login-signInButton btn"
-        />
+        {isLoading ? (
+          <div className="login-signInButton btn">
+            <RiLoader2Line className="rotate-infinit" />
+          </div>
+        ) : (
+          <input
+            type="button"
+            value="Sign In"
+            className="login-signInButton btn"
+            onClick={handleOnSignIn}
+          />
+        )}
+
         <div className="login_signUp">
           <p>Don't have account</p>
           <input
