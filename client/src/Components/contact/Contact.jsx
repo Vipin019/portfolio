@@ -59,7 +59,7 @@ const Contact = () => {
             </a>
           </article>
         </div>
-        {/* ENDOF THE CONTACT OPTIONS */}
+        {/* END OF THE CONTACT OPTIONS */}
         <form ref={form} onSubmit={sendEmail}>
           <input
             type="text"

@@ -2,6 +2,7 @@ import "./footer.css";
 import { BsFacebook } from "react-icons/bs";
 import { BsInstagram } from "react-icons/bs";
 import { AiFillTwitterSquare } from "react-icons/ai";
+import { FaYoutube } from "react-icons/fa";
 
 const footer = () => {
   return (
@@ -33,14 +34,14 @@ const footer = () => {
       </ul>
 
       <div className="footer__socials">
-        <a href="https://facebook.com">
-          <BsFacebook />
-        </a>
-        <a href="https://instagram.com">
+        <a href="https://www.instagram.com/vipin_patel_019/">
           <BsInstagram />
         </a>
-        <a href="https://twitter.com">
-          <AiFillTwitterSquare />
+        <a href="https://www.youtube.com/channel/UC1CVK2N0M9liWe-uXSX0zCw">
+          <FaYoutube />
+        </a>
+        <a href="https://facebook.com">
+          <BsFacebook />
         </a>
       </div>
       <div className="footer__copyright">

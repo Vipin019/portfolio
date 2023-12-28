@@ -43,7 +43,7 @@ body {
   height: 100%;
   width: 100%;
   font-family: "Poppins", sans-serif;
-  background-color: var(--color-bg-variant);
+  /* background-color: var(--color-bg-variant); */
   background-image: url("../src/Images/bg.png");
 }
 h1,
@@ -59,7 +59,7 @@ h1 {
   font-size: 2.5rem;
 }
 section {
-  margin-top: 5rem;
+  margin-top: 1rem;
 }
 section > h2,
 section > h5 {

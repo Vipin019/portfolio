@@ -5,6 +5,7 @@ import { BsBook } from "react-icons/bs";
 import { MdMiscellaneousServices } from "react-icons/md";
 import { MdContactPhone } from "react-icons/md";
 import { useState } from "react";
+import { ImBlog } from "react-icons/im";
 
 const FloatingNav = () => {
   const [activeNav, setActiveNav] = useState("#");
@@ -14,6 +15,7 @@ const FloatingNav = () => {
         href="#"
         onClick={() => setActiveNav("#")}
         className={activeNav === "#" ? "active" : ""}
+        title="Scroll Up"
       >
         <AiOutlineHome />
       </a>
@@ -21,6 +23,7 @@ const FloatingNav = () => {
         href="#about"
         onClick={() => setActiveNav("#about")}
         className={activeNav === "#about" ? "active" : ""}
+        title="About"
       >
         <CgProfile />
       </a>
@@ -28,6 +31,7 @@ const FloatingNav = () => {
         href="#experience"
         onClick={() => setActiveNav("#experience")}
         className={activeNav === "#experience" ? "active" : ""}
+        title="Experiences"
       >
         <BsBook />
       </a>
@@ -35,6 +39,7 @@ const FloatingNav = () => {
         href="#featured"
         onClick={() => setActiveNav("#featured")}
         className={activeNav === "#featured" ? "active" : ""}
+        title="Features"
       >
         <MdMiscellaneousServices />
       </a>
@@ -42,8 +47,17 @@ const FloatingNav = () => {
         href="#contact"
         onClick={() => setActiveNav("#contact")}
         className={activeNav === "#contact" ? "active" : ""}
+        title="Contact"
       >
         <MdContactPhone />
+      </a>
+      <a
+        href="/blog"
+        onClick={() => setActiveNav("#blog")}
+        className={activeNav === "#blog" ? "active" : ""}
+        title="View Blogs"
+      >
+        <ImBlog />
       </a>
     </nav>
   );

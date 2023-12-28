@@ -1,6 +1,4 @@
 import "./about.css";
-import React from "react";
-import ME from "../../Images/dp.png";
 import { FaAward } from "react-icons/fa";
 import { IoMdPeople } from "react-icons/io";
 import { FaFolder } from "react-icons/fa";
@@ -12,10 +10,6 @@ const About = () => {
       <h2>About Me</h2>
 
       <div className="container about__container">
-        <div className="about__me-image">
-          <img src={ME} alt="about image" />
-        </div>
-
         <div className="about__content">
           <div className="about__cards">
             <article className="about__card">
@@ -34,15 +28,10 @@ const About = () => {
               <small>10+Completed</small>
             </article>
           </div>
-
           <p>
             I am Vipin Kumar Patel. I am in the prefinal year of my engineering.
             My major is Electrical Engineering. I love coding.
           </p>
-
-          <a href="#contact" className="btn btn-primary">
-            Let's Talk
-          </a>
         </div>
       </div>
     </section>
