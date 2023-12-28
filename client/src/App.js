@@ -9,10 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   return (
     <>
+      <ToastContainer />
       <Navbar />
       <ShortProfile />
       <Auth />
-      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>

@@ -1,5 +1,5 @@
 .shortProfile {
-  position: absolute;
+  position: fixed;
   top: 0.5rem;
   right: 3.7rem;
   height: 4rem;

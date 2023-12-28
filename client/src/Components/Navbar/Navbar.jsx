@@ -6,28 +6,39 @@ import {
   setShortProfileContainerDisp,
   setAuthContainerDisp,
   setAuthDisp,
-  setLoginState,
 } from "../../actions/index";
+import { useState } from "react";
 // import { useNavigate } from "react-router-dom"; //https://stackoverflow.com/questions/34735580/how-to-do-a-redirect-to-another-route-with-react-router
 
 const Navbar = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
+  // const [auth, setAuth] = useState("auth-h");
+
   const loginState = useSelector((state) => {
     return state.setLoginState;
+  });
+  const authDisp = useSelector((state) => {
+    return state.setAuthDisp;
   });
 
   return (
     <div
       className="navbar"
       title="Click to view profile"
-      onClick={() => {
+      onClick={async () => {
         if (loginState) {
           dispatch(setShortProfileDisp("shortProfile"));
           dispatch(setShortProfileContainerDisp());
         } else {
           dispatch(setAuthContainerDisp());
-          dispatch(setAuthDisp("auth"));
+          if (authDisp === "auth") {
+            setTimeout(() => {
+              dispatch(setAuthDisp("auth-h"));
+            }, 500);
+          } else {
+            dispatch(setAuthDisp("auth"));
+          }
         }
       }}
     >

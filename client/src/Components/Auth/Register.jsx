@@ -211,7 +211,7 @@ const Register = () => {
         );
         if (response?.data?.success) {
           dispatch(setAuthContainerDisp());
-          setInterval(() => {
+          setTimeout(() => {
             dispatch(setAuthDisp("auth-h"));
             dispatch(setLoginState(true));
           }, 500);
@@ -235,7 +235,7 @@ const Register = () => {
         );
         if (response?.data?.success) {
           dispatch(setAuthContainerDisp());
-          setInterval(() => {
+          setTimeout(() => {
             dispatch(setAuthDisp("auth-h"));
             dispatch(setLoginState(true));
           }, 500);
