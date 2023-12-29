@@ -5,6 +5,7 @@ import Auth from "./Pages/Auth";
 import Home from "./Pages/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ForgetPassword from "./Pages/ForgetPassword";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Auth />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/password/forget" element={<ForgetPassword />} />
       </Routes>
     </>
   );

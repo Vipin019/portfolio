@@ -1,6 +1,7 @@
 import "./navbar.css";
-import defaultProfileImage from "../../../src/logo512.png";
+import { AiOutlineLogin } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import defaultProfile from "../../Images/default-avatar.jpg";
 import {
   setShortProfileDisp,
   setShortProfileContainerDisp,
@@ -13,7 +14,7 @@ import { useState } from "react";
 const Navbar = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
-  // const [auth, setAuth] = useState("auth-h");
+  const [profileImage, aetProfileImage] = useState(defaultProfile);
 
   const loginState = useSelector((state) => {
     return state.setLoginState;
@@ -42,7 +43,11 @@ const Navbar = () => {
         }
       }}
     >
-      <img src={defaultProfileImage} alt={"VP"}></img>
+      {loginState === true ? (
+        <img src={profileImage} alt={"VP"}></img>
+      ) : (
+        <AiOutlineLogin className="navbar-icon" />
+      )}
     </div>
   );
 };

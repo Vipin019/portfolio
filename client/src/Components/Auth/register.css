@@ -84,9 +84,3 @@
 .register_withOther > img:hover {
   opacity: 100%;
 }
-.correct {
-  color: var(--color-green);
-}
-.incorrect {
-  color: var(--color-red);
-}

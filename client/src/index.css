@@ -142,3 +142,10 @@ a:hover {
     transform: rotate(360deg);
   }
 }
+
+.correct {
+  color: var(--color-green);
+}
+.incorrect {
+  color: var(--color-red);
+}

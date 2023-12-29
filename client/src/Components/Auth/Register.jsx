@@ -3,7 +3,7 @@ import googleLogo from "../../Images/googleLogo.png";
 import githubLogo from "../../Images/githubLogo.png";
 import linkedinLogo from "../../Images/linkedinLogo.png";
 // import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { MdInfo } from "react-icons/md";
 import { TiTick } from "react-icons/ti";

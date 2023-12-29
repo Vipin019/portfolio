@@ -8,6 +8,7 @@ import {
   setAuthDisp,
   setAuthState,
   setLoginState,
+  setForgetState,
 } from "./changeAuth";
 const rootReducer = combineReducers({
   setShortProfileDisp,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   setAuthDisp,
   setAuthState,
   setLoginState,
+  setForgetState,
 });
 
 export default rootReducer;

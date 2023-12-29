@@ -21,3 +21,6 @@ export const setAuthState = (val) => {
 export const setLoginState = (val) => {
   return { type: "setLoginState", payload: val };
 };
+export const setForgetState = (val) => {
+  return { type: "setForgetState", payload: val };
+};

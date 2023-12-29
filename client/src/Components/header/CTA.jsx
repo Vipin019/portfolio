@@ -1,10 +1,10 @@
 const Resume =
-  "https://www.overleaf.com/download/project/62d4edfa570fabdb1bba4643/build/182a5f7df7d-5a48a575c5bc79c5/output/output.pdf?compileGroup=standard&clsiserverid=clsi-reg-e2-c-f-kcfn&popupDownload=true";
+  "https://www.overleaf.com/download/project/62d4edfa570fabdb1bba4643/build/18cb405ea5d-f649912e1039a080/output/output.pdf?compileGroup=standard&clsiserverid=clsi-pre-emp-n2d-b-f-xw7g&enable_pdf_caching=true&popupDownload=true";
 
 const CTA = () => {
   return (
     <div className="cta">
-      <a href={Resume} download className="btn">
+      <a href={Resume} target="_blank" download className="btn">
         Download Resume
       </a>
       <a href="#contact" className="btn btn-primary">

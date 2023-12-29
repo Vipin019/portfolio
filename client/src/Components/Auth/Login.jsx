@@ -10,6 +10,7 @@ import {
   setAuthContainerDisp,
   setAuthDisp,
   setAuthState,
+  setForgetState,
   setLoginState,
 } from "../../actions/index";
 import { toast } from "react-toastify";
@@ -163,6 +164,9 @@ const Login = () => {
           type="button"
           value="Forget Password"
           className="login-forget btn"
+          onClick={() => {
+            dispatch(setForgetState(true));
+          }}
         />
         {isLoading ? (
           <div className="login-signInButton btn">

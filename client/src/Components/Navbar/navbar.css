@@ -1,7 +1,6 @@
 .navbar {
   width: 2rem;
   height: 2rem;
-  background-color: aqua;
   border-radius: 100%;
   border: 1.5px solid var(--color-light);
   position: fixed;
@@ -27,6 +26,16 @@
   opacity: 90%;
 }
 .navbar > img:hover {
+  cursor: pointer;
+  transition: var(--transition);
+  opacity: 100%;
+}
+.navbar-icon {
+  font-size: 1.3rem;
+  opacity: 80%;
+  transform: rotate(180deg);
+}
+.navbar:hover {
   cursor: pointer;
   transition: var(--transition);
   opacity: 100%;

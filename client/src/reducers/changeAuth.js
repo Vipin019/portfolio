@@ -4,6 +4,7 @@ const iniAuthContainerDisp = "auth_container-h";
 const iniAuthDisp = "auth-h";
 const iniAuthState = "login";
 const iniLoginState = getCookie("login");
+const iniForgetState = false;
 
 export const setAuthContainerDisp = (state = iniAuthContainerDisp, action) => {
   if (action.type === "setAuthContainerDisp") {
@@ -27,6 +28,12 @@ export const setAuthState = (state = iniAuthState, action) => {
 };
 export const setLoginState = (state = iniLoginState, action) => {
   if (action.type === "setLoginState") {
+    return action.payload;
+  }
+  return state;
+};
+export const setForgetState = (state = iniForgetState, action) => {
+  if (action.type === "setForgetState") {
     return action.payload;
   }
   return state;
