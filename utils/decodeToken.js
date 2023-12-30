@@ -1,3 +1,5 @@
+const JWT = require("jsonwebtoken");
+
 const decodeToken = async (token) => {
   try {
     const decode = JWT.verify(token, process.env.JWT_SECRET);

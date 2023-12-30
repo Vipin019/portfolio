@@ -4,14 +4,23 @@ import { TiTick } from "react-icons/ti";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { MdInfo } from "react-icons/md";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const ForgetPassword = () => {
+  const { id, token } = useParams();
+
   const [passwordType, setPasswordType] = useState("password");
   const [password, setPassword] = useState(null);
   const [passwordLevel, setPasswordLevel] = useState("Invalid");
   /*******************************CONFIRM PASSWORD */
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
   const [confirmPassword, setConfirmPassword] = useState(null);
+
+  const userId = useSelector((state) => {
+    return state.setAuthId;
+  });
 
   function isUpperCase(s) {
     for (let val of s) {
@@ -105,6 +114,36 @@ const ForgetPassword = () => {
         setPasswordLevel("Weak");
       } else {
         setPasswordLevel("Invalid");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong.");
+    }
+  };
+  const handleOnReset = async () => {
+    try {
+      if (
+        password !== null &&
+        passwordLevel !== "Invalid" &&
+        password === confirmPassword
+      ) {
+        const res = await axios.post(
+          "http://localhost:8080/api/v2/auth/password/forget/update",
+          {
+            email: userId,
+            id,
+            token,
+            newPassword: password,
+          }
+        );
+
+        if (res?.data?.success) {
+          toast.success(res?.data?.message);
+        } else {
+          toast.error(res?.data?.message);
+        }
+      } else {
+        toast.error("Something went wrong.");
       }
     } catch (error) {
       console.log(error);
@@ -222,7 +261,12 @@ const ForgetPassword = () => {
               : "Password and confirm password should be same."}
           </small>
         </div>
-        <input type="button" value={"Reset Password"} className="btn" />
+        <input
+          type="button"
+          value={"Reset Password"}
+          className="btn"
+          onClick={handleOnReset}
+        />
       </div>
     </div>
   );

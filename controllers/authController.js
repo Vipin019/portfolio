@@ -128,10 +128,11 @@ const registerByEmailAndPassword = async (req, res) => {
         "Can not creat account please try again."
       );
     }
-    const res1 = await new userModel({
-      email,
+    const res2 = await new authModel({
+      userId,
+      password: hashedPassword,
     }).save();
-    if (!res1) {
+    if (!res2) {
       return sendRes(
         res,
         200,
@@ -139,14 +140,14 @@ const registerByEmailAndPassword = async (req, res) => {
         "Can not creat account please try again."
       );
     }
-    const res2 = await new authModel({
-      userId,
-      password: hashedPassword,
+    const res1 = await new userModel({
+      auth: res2._id,
+      email,
     }).save();
-    if (!res2) {
-      let deleted = await userModel.deleteOne({ email });
+    if (!res1) {
+      let deleted = await authModel.deleteOne({ userId });
       while (!deleted) {
-        deleted = await userModel.deleteOne({ email });
+        deleted = await authModel.deleteOne({ email });
       }
       return sendRes(
         res,
@@ -155,6 +156,7 @@ const registerByEmailAndPassword = async (req, res) => {
         "Can not creat account please try again."
       );
     }
+
     //login after creating account
     const token = JWT.sign({ _id: res2._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.EXPIRE_IN,
@@ -191,14 +193,23 @@ const emailAlreadyRegistred = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return sendRes(res, 401, false, "Email is required.");
+      return sendRes(res, 200, false, "Email is required.");
     }
     const isRegistred = await userModel.findOne({ email });
     // console.log(isRegistred);
     if (isRegistred) {
-      return sendRes(res, 200, true, "Email Already registred please sign in.");
+      const isRegistred = await userModel.findOne({ email });
+      return sendRes(
+        res,
+        200,
+        true,
+        "Email Already registred please sign in.",
+        { data: isRegistred }
+      );
     }
-    return sendRes(res, 200, false, "Email not registred.");
+    return sendRes(res, 200, false, "Email not registred.", {
+      data: isRegistred,
+    });
   } catch (error) {
     console.log("Error in emailAlreadyRegistred function.".red);
     console.log(error);
@@ -292,7 +303,7 @@ const loginByEmailAndPasswordController = async (req, res) => {
     if (!password) {
       return sendRes(res, 200, false, "Password is required.");
     }
-    const user = await userModel.findOne({ email }).populate();
+    const user = await userModel.findOne({ email }).populate("auth");
     if (!user) {
       return sendRes(
         res,
@@ -540,44 +551,53 @@ const emailVerificationController = async (req, res) => {
 const sendEmailForForgetPasswordController = async (req, res) => {
   try {
     const { email, userId } = req.body;
-    if (userId) {
+    if (!email && userId) {
       const auth = await authModel.findOne({ userId });
       if (!auth) {
-        return sendRes(res, 404, false, "This userId is not registred.");
+        return sendRes(res, 200, false, "This userId is not registred.");
       }
       const user = await userModel
         .findOne({ auth: { userId: userId } })
-        .populate();
-      if (!user) {
+        .populate("auth");
+      if (!user.emailVerified) {
         /*************Update the passwoed based on the question and answer************************/
         const { que, ans } = req.body;
         if (!que) {
-          return sendRes(res, 401, false, "Please select your question.");
+          return sendRes(res, 200, false, "Please select your question.");
         }
         if (!ans) {
-          return sendRes(res, 401, false, "Please select your answer.");
+          return sendRes(res, 200, false, "Please select your answer.");
         }
         if (!auth.que === que || !auth.ans === ans) {
           return sendRes(
             res,
-            401,
+            200,
             false,
             "Incorrect combination of your question and answer."
           );
         }
         const { newPassword } = req.body;
+        const hashedPassword = await hashPassword(newPassword);
+        if (!hashedPassword) {
+          return sendRes(
+            res,
+            202,
+            false,
+            "Can not creat account please try again."
+          );
+        }
         const updated = await authModel.findOneAndUpdate(
           { userId },
           {
             $set: {
-              password: newPassword,
+              password: hashedPassword,
             },
           }
         );
         if (!updated) {
           return sendRes(
             res,
-            500,
+            200,
             false,
             "Can not reset password please try again."
           );
@@ -586,7 +606,7 @@ const sendEmailForForgetPasswordController = async (req, res) => {
       } //----------------------------------------------------------end
       /****************send reset email if account is created by userId and password*************************/
       const generatedteToken = JWT.sign(
-        { _id: user._id },
+        { token: user.auth.password },
         process.env.JWT_SECRET,
         {
           expiresIn: process.env.EXPIRE_IN,
@@ -595,22 +615,12 @@ const sendEmailForForgetPasswordController = async (req, res) => {
       if (!generatedteToken) {
         return sendRes(
           res,
-          401,
+          200,
           false,
           "Something went wrong please try again."
         );
       }
-      const id = user._id;
-      const hashedId = await hashPassword(id);
-      if (!hashedId) {
-        return sendRes(
-          res,
-          401,
-          false,
-          "Something went wrong please try again."
-        );
-      }
-      const url = `http://localhost:8080/api/v2/auth/password/forget?id=${hashedId}&token=${generatedteToken}`;
+      const url = `http://localhost:8080/api/v2/auth/password/forget?id=${user._id}&token=${generatedteToken}`;
       await sendEmail({
         email: user.email,
         subject: `Forget Password`,
@@ -624,26 +634,22 @@ const sendEmailForForgetPasswordController = async (req, res) => {
         "Please check your email we have send an email. Please follow the email to reset your password."
       );
     } //------------------------------------------------------------------------------end
-    /********************Send reset email when user has not nogin using userId and password*************************/
-    const user = await userModel.findOne({ email });
+    /********************Send reset email when user has not using userId and password*************************/
+    const user = await userModel.findOne({ email }).populate("auth");
     if (!user) {
-      return sendRes(res, 500, false, "Incorrect request.");
+      return sendRes(res, 200, false, "Incorrect request.");
     }
     const generatedteToken = JWT.sign(
-      { _id: user._id },
+      { token: user.auth.password },
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.EXPIRE_IN,
       }
     );
     if (!generatedteToken) {
-      return sendRes(res, 401, false, "Something went wrong please try again.");
+      return sendRes(res, 200, false, "Something went wrong please try again.");
     }
-    const hashedId = await hashPassword(id);
-    if (!hashedId) {
-      return sendRes(res, 401, false, "Something went wrong please try again.");
-    }
-    const url = `http://localhost:8080/api/v2/auth/password/forget?id=${hashedId}&token=${generatedteToken}`;
+    const url = `http://localhost:8080/api/v2/auth/password/forget?id=${user._id}&token=${generatedteToken}`;
     await sendEmail({
       email: user.email,
       subject: `Forget Password`,
@@ -662,17 +668,19 @@ const sendEmailForForgetPasswordController = async (req, res) => {
     return sendRes(res, 500, false, "Server internal error.");
   }
 };
-const forgetPasswordController = async (req, res, next) => {
+const forgetPasswordController = async (req, res) => {
   try {
-    const { hashedId, token } = req.query;
+    const { id, token } = req.query;
     const decoded = await decodeToken(token);
     if (!decoded) {
-      return sendRes(res, 401, false, "Something went wrong please try again.");
+      return sendRes(res, 200, false, "Something went wrong please try again.");
     }
-    if (!compareToken(decoded._id, hashedId)) {
-      return sendRes(res, 401, false, "Link expired, please try again.");
+    const user = await userModel.findById(id).populate("auth");
+    if (!user || user.auth.password !== decoded.token) {
+      return sendRes(res, 200, false, "Link expired, please try again.");
     }
-    next();
+    return res.redirect(`/password/forget/${user.auth._id}/${token}`);
+    // return sendRes(res, 200, true, "Provide your new password");
   } catch (error) {
     console.log("Error in forgetPasswordController function.".red);
     console.log(error);
@@ -681,24 +689,54 @@ const forgetPasswordController = async (req, res, next) => {
 };
 const updateForgetPasswordController = async (req, res) => {
   try {
-    const { newPassword } = req.body;
-    const updated = await userModel.findOneAndUpdate(
-      { _id: decoded._id },
+    const { newPassword, id, token } = req.body; //here id is in authModel
+
+    if (!newPassword) {
+      return sendRes(res, 200, false, "Enter your new password");
+    }
+
+    if (!id || !token) {
+      return sendRes(res, 200, false, "Incorrect request.");
+    }
+    const auth = await authModel.findById(id);
+    if (!auth) {
+      return sendRes(res, 200, false, "Incorrect request..");
+    }
+    const decoded = await decodeToken(token);
+    if (!decoded) {
+      return sendRes(res, 200, false, "Something went wrong please try again.");
+    }
+    // console.log(token);
+    if (decoded.token !== auth.password) {
+      return sendRes(res, 200, false, "Incorrect request...");
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+    if (!hashedPassword) {
+      return sendRes(
+        res,
+        202,
+        false,
+        "Can not creat account please try again."
+      );
+    }
+    const updated = await authModel.findOneAndUpdate(
+      { _id: id },
       {
         $set: {
-          password: newPassword,
+          password: hashedPassword,
         },
       }
     );
     if (!updated) {
       return sendRes(
         res,
-        500,
+        200,
         false,
         "Can not reset password please try again."
       );
     }
-    return sendRes(res, 201, true, "Password updated successfully.");
+    return sendRes(res, 201, true, "Password reset successfully.");
   } catch (error) {
     console.log("Error in updateForgetPasswordController function.".red);
     console.log(error);
@@ -723,4 +761,6 @@ module.exports = {
   sendEmailForEmailVerificationController,
   emailVerificationController,
   sendEmailForForgetPasswordController,
+  forgetPasswordController,
+  updateForgetPasswordController,
 };

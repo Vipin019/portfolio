@@ -287,7 +287,7 @@ const Register = () => {
                       <RxCross2
                         className="register_registerInfo_id-icon incorrect"
                         onClick={() => {
-                          setId(" ");
+                          setId("");
                           setIsEmail(false);
                           setIsEmailAlreadyReg(false);
                         }}

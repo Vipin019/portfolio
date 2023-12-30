@@ -5,13 +5,15 @@ import linkedinLogo from "../../Images/linkedinLogo.png";
 // import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setAuthContainerDisp,
   setAuthDisp,
   setAuthState,
   setForgetState,
   setLoginState,
+  setEmailVerified,
+  setAuthId,
 } from "../../actions/index";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -26,6 +28,10 @@ const Login = () => {
   const [isEmail, setIsEmail] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
 
+  const emailVerified = useSelector((state) => {
+    return state.setEmailVerified;
+  });
+
   function removeSpace(s) {
     let ans = "";
     let i = 0;
@@ -37,12 +43,31 @@ const Login = () => {
     return ans;
   }
 
-  const handleIdChange = (e) => {
+  const handleIdChange = async (e) => {
     try {
-      setId(removeSpace(e.target.value));
+      const val = removeSpace(e.target.value);
+      setId(val);
+      dispatch(setAuthId(val));
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const isValid = emailRegex.test(removeSpace(e.target.value));
+      const isValid = emailRegex.test(val);
       setIsEmail(isValid);
+      if (isValid) {
+        const response = await axios.post(
+          "http://localhost:8080/api/v2/auth/email-registred",
+          {
+            email: val,
+          }
+        );
+        if (
+          response?.data?.success &&
+          response?.data?.data?.data?.emailVerified
+        ) {
+          // console.log(response?.data?.data?.data?.emailVerified);
+          dispatch(setEmailVerified(true));
+        } else {
+          dispatch(setEmailVerified(false));
+        }
+      }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong.");
@@ -74,7 +99,7 @@ const Login = () => {
 
           toast.success(res?.data?.message);
         } else {
-          toast.error(res?.data?.message || "Sorry some thing went wrong");
+          toast.error(res?.data?.message || "Sorry something went wrong");
         }
       } else if (
         id !== null &&
@@ -111,6 +136,30 @@ const Login = () => {
       console.log(error);
       toast.error("Something went wrong");
       setIsLoading(false);
+    }
+  };
+
+  const handleOnForget = async () => {
+    try {
+      if (emailVerified) {
+        const res = await axios.post(
+          "http://localhost:8080/api/v2/auth/password/forget/send-email",
+          {
+            email: id,
+          }
+        );
+        if (res?.data?.success) {
+          dispatch(setForgetState(true));
+          toast.success(res?.data?.message);
+        } else {
+          toast.error(res?.data?.message);
+        }
+      } else {
+        dispatch(setForgetState(true));
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -164,9 +213,7 @@ const Login = () => {
           type="button"
           value="Forget Password"
           className="login-forget btn"
-          onClick={() => {
-            dispatch(setForgetState(true));
-          }}
+          onClick={handleOnForget}
         />
         {isLoading ? (
           <div className="login-signInButton btn">

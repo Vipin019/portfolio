@@ -1,16 +1,20 @@
 import { useState } from "react";
 import "./forgetPassword.css";
 import { RxCross2 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setForgetState } from "../../actions";
 import { TiTick } from "react-icons/ti";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { MdInfo } from "react-icons/md";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const ForgetPassword = () => {
-  const [emailVerified, setEmailVerified] = useState(true);
   const dispatch = useDispatch();
+
+  //****************que and ans */
+  const [que, setQue] = useState(null);
+  const [ans, setAna] = useState(null);
 
   /**************************************************PASSWORD******/
   const [passwordType, setPasswordType] = useState("password");
@@ -19,6 +23,14 @@ const ForgetPassword = () => {
   /*******************************CONFIRM PASSWORD */
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
   const [confirmPassword, setConfirmPassword] = useState(null);
+
+  const emailVerified = useSelector((state) => {
+    // console.log(state.setEmailVerified);
+    return state.setEmailVerified;
+  });
+  const id = useSelector((state) => {
+    return state.setAuthId;
+  });
 
   function isUpperCase(s) {
     for (let val of s) {
@@ -119,6 +131,34 @@ const ForgetPassword = () => {
     }
   };
 
+  const handleOnReset = async () => {
+    try {
+      if (
+        password !== null &&
+        passwordLevel !== "Invalid" &&
+        password === confirmPassword
+      ) {
+        const res = axios.post(
+          "http://localhost:8080/api/v2/auth/password/forget/send-email",
+          {
+            userId: id,
+            que,
+            ans,
+            password,
+          }
+        );
+        if (res?.data?.success) {
+          toast.success(res?.data?.message);
+        } else {
+          toast.error(res?.data?.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong.");
+    }
+  };
+
   return (
     <div className="forget">
       <RxCross2
@@ -134,16 +174,30 @@ const ForgetPassword = () => {
               Warning! you will be given only one chance
             </h6>
           </div>
-          <select className="forget_queAndAns-input inpt">
-            <option>Select your question</option>
-            <option>What is your best book</option>
-            <option>What is your best book</option>
-            <option>What is your best book</option>
+          <select
+            className="forget_queAndAns-input inpt"
+            onChange={(e) => {
+              setQue(e.target.value);
+            }}
+          >
+            <option value={null}>Select your question</option>
+            <option value={"What is your best book"}>
+              What is your best book
+            </option>
+            <option value={"What is your best book"}>
+              What is your best book
+            </option>
+            <option value={"What is your best book"}>
+              What is your best book
+            </option>
           </select>
           <input
             type="text"
             placeholder="Enter your answer"
             className="forget_queAndAns-input forget_queAndAns-answer inpt"
+            onChange={(e) => {
+              setAna(e.target.value);
+            }}
           />
           {/* -----------------------------------------PASSWORD */}
           <div className="forget_queAndAns_password">
@@ -249,7 +303,12 @@ const ForgetPassword = () => {
                 : "Password and confirm password should be same."}
             </small>
           </div>
-          <input type="button" value="Reset Password" className="btn" />
+          <input
+            type="button"
+            value="Reset Password"
+            className="btn"
+            onClick={handleOnReset}
+          />
         </div>
       ) : (
         <div className="forget-byemail">

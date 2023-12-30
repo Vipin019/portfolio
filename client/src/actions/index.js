@@ -24,3 +24,9 @@ export const setLoginState = (val) => {
 export const setForgetState = (val) => {
   return { type: "setForgetState", payload: val };
 };
+export const setAuthId = (val) => {
+  return { type: "setAuthId", payload: val };
+};
+export const setEmailVerified = (val) => {
+  return { type: "setEmailVerified", payload: val };
+};

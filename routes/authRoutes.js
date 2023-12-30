@@ -15,6 +15,9 @@ const {
   sendEmailForEmailVerificationController,
   emailVerificationController,
   userIdAlreadyRegistred,
+  forgetPasswordController,
+  sendEmailForForgetPasswordController,
+  updateForgetPasswordController,
 } = require("../controllers/authController.js");
 const passportGoogleUtils = require("../utils/passportGoogleUtils.js");
 const passportGithubUtils = require("../utils/passportGithubUtils.js");
@@ -103,5 +106,13 @@ router.get("/linkedin/failure", failureLinkedinController);
 router.post("/email/verify/", sendEmailForEmailVerificationController);
 //verify mail
 router.get("/email/verify/", emailVerificationController);
+
+//forget password
+router.post(
+  "/password/forget/send-email",
+  sendEmailForForgetPasswordController
+);
+router.get("/password/forget", forgetPasswordController);
+router.post("/password/forget/update", updateForgetPasswordController);
 
 module.exports = router;

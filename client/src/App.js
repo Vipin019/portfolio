@@ -16,7 +16,10 @@ const App = () => {
       <Auth />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/password/forget" element={<ForgetPassword />} />
+        <Route
+          path="/password/forget/:id/:token"
+          element={<ForgetPassword />}
+        />
       </Routes>
     </>
   );

@@ -15,9 +15,9 @@ const userSchema = new mongoose.Schema(
       unique: [true, "Email should be unique."],
     },
     emailVerified: {
-      type: String,
-      default: "No",
-      enum: ["Yes", "No"],
+      type: Boolean,
+      default: false,
+      enum: [true, false],
     },
     avatar: {
       publicId: {
