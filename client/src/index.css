@@ -16,6 +16,7 @@
 :root {
   --color-bg: rgb(12, 12, 160);
   --color-bg-variant: rgba(46, 59, 241, 0.501);
+  --color-bg-variant-l: rgba(96, 143, 244, 0.501);
   --color-primary: rgb(46, 185, 240);
   --color-primary-variant: rgb(30, 0, 55);
   --color-white: white;

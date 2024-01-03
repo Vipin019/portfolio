@@ -10,6 +10,8 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db.js");
 const authRoute = require("./routes/authRoutes.js");
 const userRoute = require("./routes/userRoutes.js");
+const skillRoutes = require("./routes/skillRoutes.js");
+const featureRoute = require("./routes/featureRoutes.js");
 
 const app = express();
 //middlewares
@@ -35,11 +37,8 @@ app.use(express.static(__dirname + "/client/build")); //need to tell wheater it 
 //res apis
 app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/user", formidableMiddleware(), userRoute);
-
-// app.use("/cookie", (req, res) => {
-//   res.cookie("demo", "123");
-//   res.send("Hi");
-// });
+app.use("/api/v2/skill", formidableMiddleware(), skillRoutes);
+app.use("/api/v2/feature", formidableMiddleware(), featureRoute);
 
 app.use("*", function (req, res) {
   res.sendFile(__dirname + "/client/build/index.html");

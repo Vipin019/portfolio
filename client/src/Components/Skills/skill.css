@@ -1,0 +1,44 @@
+.skill {
+  width: 100%;
+  flex-direction: column;
+}
+.skill_container {
+  width: 90%;
+  flex-direction: column;
+}
+.skill_container > h5 {
+  font-size: 0.95rem;
+  color: var(--color-light);
+}
+.skill_container > h2 {
+  color: var(--color-primary);
+}
+.skill_container-largeCards {
+  flex-direction: column;
+}
+.skill_container-icon {
+  width: 49rem;
+  height: fit-content;
+  background: linear-gradient(
+    var(--color-bg-variant),
+    var(--color-light),
+    var(--color-primary),
+    var(--color-red),
+    var(--color-white),
+    var(--color-bg),
+    var(--color-light-bg),
+    var(--color-green),
+    var(--color-primary-variant)
+  );
+  opacity: 50%;
+  border-radius: 0.1rem;
+  cursor: pointer;
+}
+.skill_container--icon {
+  background: transparent;
+  backdrop-filter: blur(1px);
+  color: var(--color-primary-variant);
+  border-radius: 100%;
+  /* margin: 0.05rem; */
+  font-size: 1rem;
+}

@@ -1,0 +1,75 @@
+.skillCard {
+  flex-direction: column;
+  overflow: hidden;
+  width: 15rem;
+  height: fit-content;
+  background-color: var(--color-bg-variant);
+  margin: 1rem;
+  border-bottom: 3px solid var(--color-primary);
+  border-radius: 1rem;
+}
+.skillCard h6 {
+  font-size: 1rem;
+}
+.skillCard p {
+  font-size: 0.9rem;
+  padding: 0.2rem;
+}
+.skillCard-name {
+  background-color: var(--color-primary);
+  width: 100%;
+}
+.skillCard-name > h6 {
+  padding: 0.2rem;
+}
+.skillCard_endorsement {
+  flex-direction: column;
+  background-color: var(--color-bg-variant-l);
+  width: 90%;
+}
+.skillCard_endorsement-heading {
+  justify-content: space-between;
+}
+.skillCard_endorsement-heading > p {
+  font-size: 1rem;
+  margin: 0.5rem;
+}
+.skillCard_endorsement-heading > h6 {
+  font-size: 1rem;
+  background-color: var(--color-primary);
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+}
+.skillCard_endorsement-heading--icon {
+  font-size: 1.5rem;
+  background-color: var(--color-light-bg);
+  border-radius: 100%;
+  border: 1px solid var(--color-light-d);
+  margin: 0.5rem;
+  cursor: pointer;
+}
+.skillCard_endorsement-people {
+  width: 100%;
+  overflow: scroll;
+  background-color: var(--color-light);
+  border-radius: 1rem;
+  opacity: 80%;
+}
+.skillCard_endorsement-people--forOverflow {
+  width: fit-content;
+  border-radius: 1rem;
+  margin: 1rem 0.5rem 1rem 3rem;
+}
+.skillCard_endorsement-people--icon {
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}
+.skillCard_endorsement-people--image {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 100%;
+  cursor: pointer;
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}

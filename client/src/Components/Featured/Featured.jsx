@@ -1,6 +1,50 @@
 import "./Featured.css";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { MdExpandMore } from "react-icons/md";
 
 const Featured = () => {
+  const [features, setFeatures] = useState([]);
+  const [page, setPage] = useState(1);
+
+  const onStart = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:8080/api/v2/feature/get/?page=1"
+      );
+      if (res?.data?.success) {
+        setFeatures([res?.data?.data?.features]);
+      } else {
+        toast.success(res?.data?.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+  useEffect(() => {
+    onStart();
+  }, []);
+
+  const handleOnLoadMore = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/v2/feature/get/?page=${page + 1}`
+      );
+      if (res?.data?.success) {
+        const tempFeatures = features;
+        tempFeatures.push(res.data.data.features);
+        setFeatures(tempFeatures);
+        setPage(page + 1);
+      } else {
+        toast.error(res?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Some thing went wrong");
+    }
+  };
+
   return (
     <section id="featured">
       <h5>Problem Solving</h5>
@@ -8,98 +52,30 @@ const Featured = () => {
 
       <div className="container container__featured">
         <div className="featured__links">
-          <div className="featured__link">
-            <article className="featured__details">
-              <iframe
-                src="https://binarysearch.com/@/vkpmail019"
-                frameborder="0"
-                className="featured__details-link"
-              ></iframe>
-              <h4>binarysearch.com</h4>
-              <small>
-                <a href="https://binarysearch.com/@/vkpmail019">Profile Link</a>
-              </small>
-            </article>
-          </div>
-          <div className="featured__link">
-            <article className="featured__details">
-              <iframe
-                src="https://leetcode.com/Vipin019/"
-                frameborder="0"
-                className="featured__details-link"
-              ></iframe>
-              <h4>Leetcode</h4>
-              <small>
-                <a href="https://leetcode.com/Vipin019/">Profile Link</a>
-              </small>
-            </article>
-          </div>
-          <div className="featured__link">
-            <article className="featured__details">
-              <iframe
-                src="https://auth.geeksforgeeks.org/user/vkpmail019/practice"
-                frameborder="0"
-                className="featured__details-link"
-              ></iframe>
-              <h4>geeksforgeeks</h4>
-              <small>
-                <a href="https://auth.geeksforgeeks.org/user/vkpmail019/practice">
-                  Profile Link
-                </a>
-              </small>
-            </article>
-          </div>
-          <div className="featured__link">
-            <article className="featured__details">
-              <iframe
-                src="https://www.codechef.com/users/vipin_019"
-                frameborder="0"
-                className="featured__details-link"
-              ></iframe>
-              <h4>codechef</h4>
-              <small>
-                <a href="https://www.codechef.com/users/vipin_019">
-                  Profile Link
-                </a>
-              </small>
-            </article>
-          </div>
-          <div className="featured__link">
-            <article className="featured__details">
-              <iframe
-                src="https://codeforces.com/profile/vkpmail019"
-                frameborder="0"
-                className="featured__details-link"
-              ></iframe>
-              <h4>codeforces</h4>
-              <small>
-                <a href="https://codeforces.com/profile/vkpmail019">
-                  Profile Link
-                </a>
-              </small>
-            </article>
-          </div>
-          <div className="featured__link">
-            <article className="featured__details">
-              <iframe
-                src="https://www.hackerrank.com/vkpmail019"
-                frameborder="0"
-                className="featured__details-link"
-              ></iframe>
-              <h4>hackerrank</h4>
-              <small>
-                <a href="https://www.hackerrank.com/vkpmail019">Profile Link</a>
-              </small>
-            </article>
-          </div>
+          {features?.map((data) => (
+            <>
+              {data?.map((feature) => (
+                <div className="featured__link">
+                  <article className="featured__details">
+                    <img
+                      src={feature?.image?.url}
+                      alt="Image"
+                      className="featured__details-link"
+                    ></img>
+                    <h4>{feature?.featureName}</h4>
+                    <small>
+                      <a href={feature?.link}>Profile Link</a>
+                    </small>
+                  </article>
+                </div>
+              ))}
+            </>
+          ))}
+        </div>
+        <div className="flex feature_container-icon" onClick={handleOnLoadMore}>
+          <MdExpandMore className="flex feature_container--icon" />
         </div>
       </div>
-      {/* <iframe src="https://binarysearch.com/@/vkpmail019" frameborder="0"></iframe>
-            <iframe src="https://auth.geeksforgeeks.org/user/vkpmail019/practice" frameborder="0"></iframe>
-            <iframe src="https://leetcode.com/Vipin019/" frameborder="0"></iframe>
-            <iframe src="https://www.codechef.com/users/vipin_019" frameborder="0"></iframe>
-            <iframe src="https://codeforces.com/profile/vkpmail019" frameborder="0"></iframe>
-            <iframe src="https://www.hackerrank.com/vkpmail019" frameborder="0"></iframe> */}
     </section>
   );
 };

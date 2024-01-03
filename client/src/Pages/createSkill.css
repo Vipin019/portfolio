@@ -1,0 +1,14 @@
+.creatSkill {
+  width: 100%;
+  height: 100vh;
+}
+.creatSkill_container {
+  width: 20rem;
+  flex-direction: column;
+  overflow: hidden;
+}
+.creatSkill_container input {
+  width: 100%;
+  margin: 0.5rem 0rem 0.5rem 0rem;
+  background-color: transparent;
+}
