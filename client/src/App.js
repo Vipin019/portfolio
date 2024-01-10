@@ -8,6 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import ForgetPassword from "./Pages/ForgetPassword";
 import CreateSkill from "./Pages/CreateSkill";
 import CreateFeature from "./Pages/CreateFeature";
+import BlogHome from "./Pages/Blog/BlogHome";
+import CreateProject from "./Pages/CreateProject";
+import AdminDashboard from "./Pages/AdminDashboard";
 
 const App = () => {
   return (
@@ -24,6 +27,9 @@ const App = () => {
         />
         <Route path="/create-skill" element={<CreateSkill />} />
         <Route path="/create-feature" element={<CreateFeature />} />
+        <Route path="/create-project" element={<CreateProject />} />
+        <Route path="/blog" element={<BlogHome />} />
+        <Route path="/admin/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </>
   );

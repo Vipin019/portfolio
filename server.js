@@ -12,6 +12,7 @@ const authRoute = require("./routes/authRoutes.js");
 const userRoute = require("./routes/userRoutes.js");
 const skillRoutes = require("./routes/skillRoutes.js");
 const featureRoute = require("./routes/featureRoutes.js");
+const projectRoute = require("./routes/projectRoutes.js");
 
 const app = express();
 //middlewares
@@ -39,6 +40,7 @@ app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/user", formidableMiddleware(), userRoute);
 app.use("/api/v2/skill", formidableMiddleware(), skillRoutes);
 app.use("/api/v2/feature", formidableMiddleware(), featureRoute);
+app.use("/api/v2/project", formidableMiddleware(), projectRoute);
 
 app.use("*", function (req, res) {
   res.sendFile(__dirname + "/client/build/index.html");

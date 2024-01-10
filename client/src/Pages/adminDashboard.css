@@ -1,0 +1,25 @@
+.adminDashboard {
+  width: 100%;
+  height: fit-content;
+}
+.adminDashboard_container {
+  width: 100%;
+  height: fit-content;
+}
+.adminDashboard_container_main {
+  width: 80%;
+  height: 100vh;
+  overflow: scroll;
+}
+.adminDashboard_container_nav {
+  flex-direction: column;
+  justify-content: start;
+  width: 20%;
+  height: 100vh;
+  overflow: scroll;
+  border-right: 2px solid var(--color-light);
+}
+.adminDashboard_container_nav > input {
+  width: 90%;
+  margin: 0.5rem;
+}

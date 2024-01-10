@@ -117,8 +117,26 @@ const findAllEndorsementLengthController = async (req, res) => {
   }
 };
 
+const countAllSkillController = async (req, res) => {
+  try {
+    const feature = await skillModel.find({});
+    if (!feature) {
+      return sendRes(res, 200, false, "Some thing went wrong");
+    }
+    const len = feature.length;
+    return sendRes(res, 200, true, "Find the count in totalSkillCount", {
+      totalSkillCount: len,
+    });
+  } catch (error) {
+    console.log("Error in countAllFeaturesController function".red);
+    console.log(error);
+    return sendRes(res, 500, false, "Server internal error");
+  }
+};
+
 module.exports = {
   creatSkillsController,
   getSkillController,
   findAllEndorsementLengthController,
+  countAllSkillController,
 };

@@ -1,29 +1,32 @@
 import { useState } from "react";
-import "./createSkill.css";
+import "./createProject.css";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const CreateSkill = () => {
-  const [skillName, setSkillName] = useState(null);
-  const [yearOfExperience, setYearOfExperience] = useState(null);
+const CreateProject = () => {
+  const [name, setName] = useState(null);
+  const [repo, setRepo] = useState(null);
+  const [live, setLive] = useState(null);
   const [image, setImage] = useState(null);
   const [previewSrc, setPreviewSrc] = useState(null);
 
   const handleOnCreateSkill = async () => {
     try {
-      const skill = new FormData();
-      skill.append("skillName", skillName);
-      skill.append("yearOfExperience", yearOfExperience);
-      skill.append("image", image);
+      const project = new FormData();
+      project.append("name", name);
+      project.append("repo", repo);
+      project.append("live", live);
+      project.append("image", image);
       const res = await axios.post(
-        "http://localhost:8080/api/v2/skill/create",
-        skill
+        "http://localhost:8080/api/v2/project/create",
+        project
       );
       if (res?.data?.success) {
         toast.success(res.data.message);
-        setSkillName("");
-        setYearOfExperience("");
-        setImage({});
+        setName("");
+        setRepo("");
+        setLive("");
+        setImage(null);
         setPreviewSrc(null);
       } else {
         toast.error(res?.data?.message);
@@ -33,33 +36,42 @@ const CreateSkill = () => {
       toast.error("Some thing went wrong");
     }
   };
+
   return (
-    <div className="flex creatSkill">
-      <div className="flex creatSkill_container">
-        <h3>Create Skills</h3>
+    <div className="flex createProject">
+      <div className="flex createProject_container">
+        <h3>Create Project</h3>
         <input
           type="text"
-          placeholder="Input skill name"
           className="inpt"
+          placeholder="Enter project name"
           onChange={(e) => {
-            setSkillName(e.target.value);
+            setName(e.target.value);
           }}
         />
         <input
-          type="number"
-          placeholder="Input year of experience"
+          type="text"
           className="inpt"
+          placeholder="Enter project repository link"
           onChange={(e) => {
-            setYearOfExperience(e.target.value);
+            setRepo(e.target.value);
+          }}
+        />
+        <input
+          type="text"
+          className="inpt"
+          placeholder="Enter project live link"
+          onChange={(e) => {
+            setLive(e.target.value);
           }}
         />
         {previewSrc && <img src={previewSrc} alt="logo" />}
-        <label htmlFor="skilFile">Choose Image:</label>
+        <label htmlFor="projectFile">Choose Image:</label>
         <input
           type="file"
           accept="image/*"
           className="file inpt"
-          id="skilFile"
+          id="projectFile"
           onChange={(e) => {
             setImage(e.target.files[0]);
             if (e.target.files[0]) {
@@ -84,4 +96,4 @@ const CreateSkill = () => {
   );
 };
 
-export default CreateSkill;
+export default CreateProject;
